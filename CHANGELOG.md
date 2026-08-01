@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 — 2026-08-01
+
+- Landing page moved to its own repo ([actuals_lander](https://github.com/Hamza-Saraswat/actuals_lander)) and fully redesigned; `docs/` removed from this repo. Homepage links updated.
+
 ## 0.1.1 — 2026-08-01
 
 Pre-release validation fixes.

@@ -12,12 +12,12 @@
     {
       "name": "actuals",
       "description": "Honest metrics for AI tools and features. Designs business-outcome metrics from your context, audits dashboards for vanity metrics, generates instrumentation, and renders a scorecard.",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "source": "./.",
       "author": {
         "name": "Hamza Saraswat"
       },
-      "homepage": "https://hamza-saraswat.github.io/actuals/",
+      "homepage": "https://hamza-saraswat.github.io/actuals_lander/",
       "repository": "https://github.com/Hamza-Saraswat/actuals",
       "license": "MIT",
       "keywords": [
