@@ -1,0 +1,24 @@
+{
+  "name": "actuals",
+  "version": "0.1.0",
+  "description": "Honest metrics for AI tools and features. Interviews you about your business, writes a versioned measurement spec, audits dashboards against 20 named vanity-metric anti-patterns, generates instrumentation, and renders a scorecard — with a bundled MCP server for spec linting and vanity scanning.",
+  "author": {
+    "name": "Hamza Saraswat",
+    "email": "hamza.saraswat@gmail.com"
+  },
+  "repository": "https://github.com/Hamzas-Aigentic/actuals",
+  "homepage": "https://hamzas-aigentic.github.io/actuals/",
+  "license": "MIT",
+  "keywords": [
+    "metrics",
+    "evals",
+    "ai-measurement",
+    "roi",
+    "analytics",
+    "vanity-metrics",
+    "kpi",
+    "instrumentation",
+    "mcp",
+    "measurement"
+  ]
+}

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scorecard — Actuals (the plugin, measuring itself)</title>
+<style>
+:root{--bg:#f6f6f4;--panel:#ffffff;--ink:#1b1d24;--mut:#6a6f7f;--line:#e3e2dc;--acc:#2e5c9e}
+@media (prefers-color-scheme:dark){:root{--bg:#14161c;--panel:#1d2027;--ink:#e8e8e3;--mut:#9aa0ae;--line:#2c2f38;--acc:#7ba3dd}}
+*{box-sizing:border-box;margin:0}
+body{font:15px/1.55 ui-sans-serif,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);padding:2.5rem 1.25rem 4rem;max-width:1060px;margin:0 auto}
+header h1{font-size:1.45rem;letter-spacing:-.01em}
+header .sub{color:var(--mut);margin-top:.35rem;display:flex;gap:.9rem;flex-wrap:wrap;align-items:center;font-size:.9rem}
+.badge{display:inline-block;padding:.1rem .55rem;border-radius:99px;font-size:.75rem;font-weight:600;color:#fff;background:var(--b);vertical-align:middle}
+section{margin-top:2.2rem}
+h2{font-size:.85rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin-bottom:.8rem}
+.decision,.verdict{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:8px;padding:1rem 1.2rem;white-space:pre-wrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.9rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:1rem 1.1rem}
+.card h3{font-size:.98rem;margin-bottom:.5rem}
+.mid{color:var(--acc);font-family:ui-monospace,monospace;font-size:.8rem;font-weight:700;margin-right:.15rem}
+.def{color:var(--mut);font-size:.88rem;margin-bottom:.6rem}
+.kv{font-size:.82rem;margin:.4rem 0;color:var(--mut)}
+.kv span{display:block;text-transform:uppercase;font-size:.68rem;letter-spacing:.06em}
+.kv code{color:var(--ink);word-break:break-word;font-size:.8rem}
+.vals{display:flex;gap:1.6rem;margin:.6rem 0}
+.vals span{display:block;text-transform:uppercase;font-size:.68rem;letter-spacing:.06em;color:var(--mut)}
+.vals strong{font-size:.92rem;font-weight:600}
+.meta{display:flex;gap:.45rem;flex-wrap:wrap;align-items:center;margin-top:.55rem}
+.owner{font-size:.75rem;color:var(--mut)}
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:.86rem}
+th,td{padding:.55rem .8rem;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+tr:last-child td{border-bottom:none}
+.tablewrap{overflow-x:auto}
+.counts{display:flex;gap:.6rem;margin-bottom:.8rem}
+.findings li{margin:.3rem 0 .3rem 1.1rem;font-size:.9rem}
+.changelog li{margin:.25rem 0 .25rem 1.1rem;color:var(--mut);font-size:.86rem}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--mut);font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <h1>Actuals (the plugin, measuring itself)</h1>
+  <div class="sub">
+    <span class="badge" style="--b:#8b8fa3">draft</span>
+    <span>spec v0.1.0</span>
+    <span>owner: Hamza Saraswat</span>
+    <span>updated 2026-08-01</span>
+    <span>next review 2026-09-01</span>
+  </div>
+</header>
+
+<section>
+  <h2>The Decision these metrics inform</h2>
+  <div class="decision">At the 2026-11-01 review: if at least 5 distinct teams have living specs (per A1), continue building Actuals standalone and ship v1.1 (live reporting). If fewer than 5 living specs exist despite meaningful installs, the standalone thesis is weak — fold the method into consulting/templates or pick one vertical, and say so publicly.</div>
+</section>
+
+<section><h2>North star</h2><div class="decision" style="border-left-color:#2e9e5b">Sustained real-team usage: teams still making measurement decisions from their spec 60 days after creating it. (A free tool's honest equivalent of net revenue retention.)
+
+Team installs Actuals → design interview produces a spec tied to a real decision → audits and calibration keep the spec alive → the team's AI reporting survives scrutiny → they keep using it and tell others.</div></section>
+
+<section>
+  <h2>Outcome metrics</h2>
+  <div class="grid"><article class="card"><h3><span class="mid">OM-1</span> Living-spec count</h3><p class="def">Number of distinct teams whose spec meets the living-spec bar.</p><div class="kv"><span>Formula</span><code>count of teams with ≥2 spec version bumps within 45 days of spec creation (per A1), cumulative within the validation window ending 2026-11-01.</code></div><div class="vals"><div><span>Baseline</span><strong>0 (2026-08-01, pre-launch)</strong></div><div><span>Target</span><strong>≥5 by 2026-11-01</strong></div></div><div class="meta"><span class="badge" style="--b:#8b8fa3">assumed</span><span class="badge" style="--b:#8b8fa3">none</span><span class="owner">Hamza Saraswat</span></div></article><article class="card"><h3><span class="mid">OM-2</span> Re-audit rate</h3><p class="def">Share of interviewed teams that ran a second audit (the recurring loop actually recurred).</p><div class="kv"><span>Formula</span><code>teams with ≥2 dated files in metrics/audits/ within 60 days / all interviewed teams with a spec.</code></div><div class="vals"><div><span>Baseline</span><strong>not yet measured — see CL-1</strong></div><div><span>Target</span><strong>≥50% of teams with specs</strong></div></div><div class="meta"><span class="badge" style="--b:#8b8fa3">assumed</span><span class="badge" style="--b:#8b8fa3">none</span><span class="owner">Hamza Saraswat</span></div></article><article class="card"><h3><span class="mid">OM-3</span> Decisions citing the spec</h3><p class="def">Count of concrete decisions (expand/roll back/renew/hire) that teams attribute to spec numbers in interviews.</p><div class="kv"><span>Formula</span><code>count of interview-reported decisions naming a spec metric, validation window.</code></div><div class="vals"><div><span>Baseline</span><strong>0 (2026-08-01)</strong></div><div><span>Target</span><strong>≥3 by 2026-11-01</strong></div></div><div class="meta"><span class="badge" style="--b:#8b8fa3">assumed</span><span class="badge" style="--b:#8b8fa3">none</span><span class="owner">Hamza Saraswat</span></div></article></div>
+</section>
+
+<section>
+  <h2>Guardrails</h2>
+  <div class="grid"><article class="card"><h3><span class="mid">GM-1</span> Time-to-first-spec</h3><p class="def">Wall-clock time from install to a lint-passing spec — if the interview is a slog, nobody reaches a living spec.</p><div class="kv"><span>Formula</span><code>median session count (target: 1) reported to produce a first passing spec.</code></div><div class="vals"><div><span>Baseline</span><strong>not yet measured — see CL-1</strong></div><div><span>Tripwire</span><strong>median &gt;1 session → shorten the interview; cut phases before cutting rigor.</strong></div></div><div class="meta"><span class="badge" style="--b:#8b8fa3">assumed</span><span class="owner">Hamza Saraswat</span><span class="owner">guards OM-1</span></div></article><article class="card"><h3><span class="mid">GM-2</span> Audit false-positive rate</h3><p class="def">Share of audit findings users reject as wrong in context — an audit that cries wolf stops being run.</p><div class="kv"><span>Formula</span><code>findings rejected as incorrect / findings reviewed, per interview.</code></div><div class="vals"><div><span>Baseline</span><strong>not yet measured — see CL-1</strong></div><div><span>Tripwire</span><strong>&gt;30% rejected → retune catalog severities and scanner rules against the fixtures.</strong></div></div><div class="meta"><span class="badge" style="--b:#8b8fa3">assumed</span><span class="owner">Hamza Saraswat</span><span class="owner">guards OM-2</span></div></article><article class="card"><h3><span class="mid">GM-3</span> Claims-ledger honesty</h3><p class="def">Whether decisions cited to specs respected the ledger — a decision &quot;citing&quot; a blocked claim is the failure mode, not a success.</p><div class="kv"><span>Formula</span><code>decisions citing licensed claims / all spec-cited decisions.</code></div><div class="vals"><div><span>Baseline</span><strong>not yet measured — see CL-1</strong></div><div><span>Tripwire</span><strong>any decision citing a blocked claim → tighten the audit skill's ledger-violation check.</strong></div></div><div class="meta"><span class="badge" style="--b:#8b8fa3">assumed</span><span class="owner">Hamza Saraswat</span><span class="owner">guards OM-3</span></div></article></div>
+</section>
+
+
+
+<section>
+  <h2>Latest audit</h2>
+  <div class="decision" style="border-left-color:#8b8fa3">No audits recorded yet. Run the audit skill to populate this section.</div>
+</section>
+
+<section><h2>Vanity metrics this team will not use</h2><div class="tablewrap"><table><tr><th>Tempting metric</th><th>Pattern</th><th>Why it lies here</th><th>Instead</th></tr><tr><td>GitHub stars / installs</td><td>VM-03</td><td>Adoption is a precondition of value, not value</td><td>Tracked privately as diagnostics; never claimed as success</td></tr><tr><td>&quot;Specs generated&quot;</td><td>VM-04</td><td>A generated spec nobody revises is activity, not outcome</td><td>OM-1 living-spec bar (A1)</td></tr><tr><td>Landing-page traffic</td><td>VM-06</td><td>Numerator with no decision attached</td><td>Ignored</td></tr><tr><td>&quot;Teams love it&quot; quotes</td><td>VM-16</td><td>Sentiment diverges from effect</td><td>OM-3 decisions actually citing spec numbers</td></tr></table></div></section>
+
+<section><h2>Claims ledger</h2><div class="tablewrap"><table><tr><th>ID</th><th>Desired claim</th><th>Required evidence</th><th>Status</th></tr><tr><td>CL-1</td><td>&quot;Teams keep their specs alive with Actuals&quot;</td><td>≥5 interview-verified living specs (A1)</td><td>blocked</td></tr><tr><td>CL-2</td><td>&quot;Actuals improved a customer's metrics&quot;</td><td>That customer's own baseline + post data, shared with permission</td><td>blocked — we will never make this claim without it</td></tr><tr><td>CL-3</td><td>&quot;The audit catches real vanity metrics&quot;</td><td>Fixture answer keys pass + interview-confirmed catches in the wild</td><td>in-progress (fixtures pass as of 2026-08-01)</td></tr></table></div></section>
+
+<section><h2>Changelog</h2><ul class="changelog"><li>0.1.0 — 2026-08-01 — Initial spec, written by running the design method on the plugin itself — dogfood</li></ul></section>
+
+<footer>Renders recorded values only — no live data queries. Generated 2026-08-01 by Actuals scorecard v0.1.0 from spec v0.1.0.</footer>
+</body>
+</html>

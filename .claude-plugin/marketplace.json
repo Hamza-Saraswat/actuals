@@ -1,0 +1,32 @@
+{
+  "name": "actuals-marketplace",
+  "owner": {
+    "name": "Hamza Saraswat",
+    "url": "https://github.com/Hamzas-Aigentic"
+  },
+  "metadata": {
+    "description": "Marketplace for the Actuals plugin — honest metrics for AI tools and features.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "actuals",
+      "description": "Honest metrics for AI tools and features. Designs business-outcome metrics from your context, audits dashboards for vanity metrics, generates instrumentation, and renders a scorecard.",
+      "version": "0.1.0",
+      "source": "./.",
+      "author": {
+        "name": "Hamza Saraswat"
+      },
+      "homepage": "https://hamzas-aigentic.github.io/actuals/",
+      "repository": "https://github.com/Hamzas-Aigentic/actuals",
+      "license": "MIT",
+      "keywords": [
+        "metrics",
+        "evals",
+        "ai-measurement",
+        "vanity-metrics",
+        "analytics"
+      ]
+    }
+  ]
+}

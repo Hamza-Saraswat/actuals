@@ -1,0 +1,11 @@
+event,trigger,properties,owner,consumed_by
+chat_started,user opens the Ava widget,"user_id, plan",TBD,
+conversation_begun,user opens the Ava widget,"user_id, account_id",support-eng,unclear — duplicate of chat_started?
+message_sent,every user message,"chars, attachments",TBD,
+ava_replied,every Ava reply,"latency_ms, tokens",N/A,
+ava_reply_v2,every Ava reply (new pipeline),"latency_ms, tokens, model",TBD,kept both pipelines' events
+widget_opened,user opens the Ava widget,"user_id",growth,also fires alongside chat_started
+ticket_deflected,no human handoff within 24h,"ticket_id",support-eng,deflection reporting
+ticket_deflected_strict,no handoff and no reopen 48h,"ticket_id",TBD,nobody remembers adding this
+csat_submitted,post-chat survey response,"score, ticket_id",TBD,
+handoff_clicked,user asks for a human,"ticket_id",support-eng,

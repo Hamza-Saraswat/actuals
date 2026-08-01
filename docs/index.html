@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Actuals — honest metrics for AI tools</title>
+<meta name="description" content="A free Claude Code plugin that designs business-outcome metrics for your AI tools, audits your dashboards against 20 named vanity-metric anti-patterns, and generates the instrumentation.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23b23327'/%3E%3Cpath d='M8 17.5 L14 23 L24 9' stroke='%23f2efe6' stroke-width='3.5' fill='none' stroke-linecap='square'/%3E%3C/svg%3E">
+<style>
+:root{
+  --paper:#f2efe6; --card:#faf8f0; --ink:#1c1e21; --mut:#6f6d63; --line:#d8d3c2;
+  --red:#b23327; --red-soft:#b3332715; --green:#28684a; --amber:#9c6c1c; --accent:#1f3a5f;
+  --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+  --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#151619; --card:#1c1e22; --ink:#e9e6da; --mut:#93917f; --line:#2c2e33;
+    --red:#d6564a; --red-soft:#d6564a1c; --green:#4da47c; --amber:#cf9440; --accent:#8fb0da;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--serif);
+  font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 1px 1px, rgba(0,0,0,.028) 1px, transparent 0);
+  background-size:14px 14px;
+}
+@media (prefers-color-scheme:dark){ body{background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,.02) 1px, transparent 0)} }
+.wrap{max-width:1080px;margin:0 auto;padding:0 1.4rem}
+a{color:inherit}
+.mono{font-family:var(--mono)}
+.kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mut)}
+
+/* ---------- top bar ---------- */
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 0;border-bottom:1px solid var(--line)}
+nav .logo{font-family:var(--mono);font-weight:700;font-size:1rem;letter-spacing:.04em}
+nav .logo b{color:var(--red)}
+nav .links{display:flex;gap:1.4rem;font-family:var(--mono);font-size:.8rem}
+nav a{text-decoration:none;border-bottom:1px solid transparent}
+nav a:hover{border-bottom-color:var(--ink)}
+
+/* ---------- hero ---------- */
+.hero{padding:5.5rem 0 4rem;position:relative}
+.hero h1{
+  font-size:clamp(2.6rem,7vw,4.6rem); line-height:1.02; letter-spacing:-.015em;
+  font-weight:600; max-width:13ch;
+}
+.hero h1 .lie{position:relative;white-space:nowrap}
+.hero h1 .lie::after{
+  content:""; position:absolute; left:-2%; right:-2%; top:54%; height:.09em;
+  background:var(--red); transform:rotate(-1.6deg); transform-origin:left center;
+  animation:strike .5s .9s cubic-bezier(.7,0,.3,1) both;
+}
+@keyframes strike{from{transform:rotate(-1.6deg) scaleX(0)}to{transform:rotate(-1.6deg) scaleX(1)}}
+.hero .sub{margin-top:1.6rem;font-size:1.15rem;max-width:46rem;color:var(--mut)}
+.hero .sub b{color:var(--ink);font-weight:600}
+.stamp{
+  position:absolute; right:1rem; top:4.2rem; font-family:var(--mono); color:var(--red);
+  border:3px double var(--red); padding:.5rem 1rem; font-size:.8rem; letter-spacing:.28em;
+  text-transform:uppercase; transform:rotate(7deg); opacity:.82; user-select:none;
+  mask-image:radial-gradient(circle at 30% 40%, black 60%, rgba(0,0,0,.72));
+}
+@media (max-width:760px){.stamp{display:none}}
+.install{
+  margin-top:2.4rem; background:var(--card); border:1px solid var(--line); border-radius:10px;
+  max-width:46rem; overflow:hidden;
+}
+.install .bar{display:flex;justify-content:space-between;align-items:center;padding:.5rem .9rem;border-bottom:1px solid var(--line)}
+.install .bar span{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
+.install pre{padding: .9rem 1rem;font-family:var(--mono);font-size:.86rem;line-height:1.7;overflow-x:auto}
+.install .c{color:var(--mut)}
+button.copy{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;background:none;color:var(--ink);
+  border:1px solid var(--line);border-radius:6px;padding:.28rem .7rem;cursor:pointer
+}
+button.copy:hover{border-color:var(--ink)}
+.cta-row{margin-top:1.3rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+.btn{
+  font-family:var(--mono);font-size:.82rem;text-decoration:none;padding:.65rem 1.15rem;border-radius:8px;
+  border:1.5px solid var(--ink);letter-spacing:.03em;display:inline-flex;gap:.5rem;align-items:center
+}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.primary:hover{background:var(--red);border-color:var(--red)}
+.btn:not(.primary):hover{border-color:var(--red);color:var(--red)}
+
+/* reveal on load */
+.rise{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.d1{animation-delay:.08s}.d2{animation-delay:.18s}.d3{animation-delay:.3s}.d4{animation-delay:.42s}
+
+/* ---------- section chrome ---------- */
+section{padding:4.2rem 0;border-top:1px solid var(--line)}
+.folio{display:flex;align-items:baseline;gap:1rem;margin-bottom:2rem}
+.folio .no{font-family:var(--mono);color:var(--red);font-size:.8rem}
+.folio h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:600;letter-spacing:-.01em}
+.folio .note{margin-left:auto;font-family:var(--mono);font-size:.72rem;color:var(--mut);letter-spacing:.06em}
+@media (max-width:700px){.folio .note{display:none}}
+
+/* ---------- receipts (dual audience) ---------- */
+.receipts{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media (max-width:800px){.receipts{grid-template-columns:1fr}}
+.receipt{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.5rem 1.5rem 1.3rem;position:relative}
+.receipt .aud{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.receipt h3{font-size:1.25rem;margin:.5rem 0 .7rem}
+.receipt p{color:var(--mut);font-size:.95rem}
+.receipt .big{
+  font-family:var(--mono);display:block;margin:1rem 0 .4rem;font-size:1.7rem;color:var(--red);font-weight:700;letter-spacing:-.02em
+}
+.receipt .src{font-family:var(--mono);font-size:.7rem;color:var(--mut)}
+.receipt .src a{color:var(--mut)}
+.statline{display:flex;gap:2.5rem;flex-wrap:wrap;margin-top:1.6rem;padding:1.1rem 1.4rem;border:1px dashed var(--line);border-radius:10px}
+.statline div{font-size:.85rem;color:var(--mut)}
+.statline b{display:block;font-family:var(--mono);font-size:1.15rem;color:var(--ink)}
+
+/* ---------- ledger (before/after) ---------- */
+.ledger{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.ledger .lhead{display:grid;grid-template-columns:1fr 1fr;font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);border-bottom:1px solid var(--line)}
+.ledger .lhead div{padding:.7rem 1.2rem}
+.ledger .lhead div+div{border-left:1px solid var(--line)}
+.lrow{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}
+.lrow:last-child{border-bottom:none}
+.lrow>div{padding:1rem 1.2rem;font-size:.92rem}
+.lrow>div+div{border-left:1px solid var(--line)}
+.lrow .was{position:relative;color:var(--mut);background:var(--red-soft)}
+.lrow .was .txt{text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:1.5px}
+.vm{
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;color:var(--red);
+  border:1.5px solid var(--red);border-radius:4px;padding:.1rem .4rem;margin-left:.5rem;
+  display:inline-block;transform:rotate(-2deg);white-space:nowrap;vertical-align:middle
+}
+.lrow .now{font-family:var(--mono);font-size:.84rem}
+.lrow .now b{color:var(--green)}
+@media (max-width:700px){
+  .lrow,.ledger .lhead{grid-template-columns:1fr}
+  .lrow>div+div{border-left:none;border-top:1px dashed var(--line)}
+  .ledger .lhead div:last-child{display:none}
+}
+
+/* ---------- how it works ---------- */
+.steps{display:grid;gap:1rem}
+.step{
+  display:grid;grid-template-columns:56px 1fr;gap:1.2rem;background:var(--card);
+  border:1px solid var(--line);border-radius:10px;padding:1.35rem 1.4rem;align-items:start
+}
+.step .n{
+  font-family:var(--mono);color:var(--paper);background:var(--ink);border-radius:8px;width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700
+}
+.step h3{font-size:1.1rem;margin-bottom:.25rem}
+.step h3 code{font-family:var(--mono);font-size:.88rem;color:var(--red);background:var(--red-soft);padding:.12rem .45rem;border-radius:5px}
+.step p{color:var(--mut);font-size:.93rem;max-width:60ch}
+.step pre{
+  margin-top:.8rem;background:var(--paper);border:1px solid var(--line);border-radius:8px;
+  padding:.8rem .95rem;font-family:var(--mono);font-size:.76rem;line-height:1.65;overflow-x:auto;color:var(--ink)
+}
+.step pre .g{color:var(--green)} .step pre .r{color:var(--red)} .step pre .m{color:var(--mut)}
+@media (max-width:600px){.step{grid-template-columns:1fr}.step .n{width:38px;height:38px}}
+
+/* ---------- catalog ---------- */
+.cat{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+@media (max-width:840px){.cat{grid-template-columns:1fr}}
+.pat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.3rem 1.3rem 1.1rem;display:flex;flex-direction:column;gap:.55rem}
+.pat .id{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;color:var(--red);font-weight:700}
+.pat h3{font-size:1.08rem}
+.pat p{color:var(--mut);font-size:.9rem;flex:1}
+.pat .fix{font-family:var(--mono);font-size:.76rem;color:var(--green);border-top:1px dashed var(--line);padding-top:.6rem}
+.more{
+  margin-top:1.1rem;font-family:var(--mono);font-size:.8rem;color:var(--mut);text-align:center
+}
+.more a{color:var(--ink)}
+
+/* ---------- stack strip ---------- */
+.stack{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+@media (max-width:840px){.stack{grid-template-columns:1fr}}
+.lane{border:1px dashed var(--line);border-radius:10px;padding:1.3rem}
+.lane .dir{font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.lane h3{font-size:1.05rem;margin:.45rem 0 .5rem}
+.lane p{color:var(--mut);font-size:.9rem}
+.lane .tags{margin-top:.8rem;display:flex;flex-wrap:wrap;gap:.4rem}
+.lane .tags span{font-family:var(--mono);font-size:.68rem;border:1px solid var(--line);border-radius:99px;padding:.15rem .55rem;color:var(--mut)}
+
+/* ---------- honest footer ---------- */
+.honest{border:1.5px solid var(--ink);border-radius:12px;padding:1.6rem 1.7rem;background:var(--card)}
+.honest h3{font-size:1.15rem;margin-bottom:.6rem}
+.honest p{color:var(--mut);font-size:.95rem;max-width:70ch}
+.honest .mono{color:var(--ink)}
+footer{padding:2.6rem 0 3.4rem;border-top:1px solid var(--line);margin-top:4.2rem}
+footer .row{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.75rem;color:var(--mut)}
+footer a{color:var(--mut)}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rise,.hero h1 .lie::after{animation:none}
+  .reveal{opacity:1;transform:none;transition:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <div class="logo">actuals<b>_</b></div>
+  <div class="links">
+    <a href="#how">how it works</a>
+    <a href="#catalog">the catalog</a>
+    <a href="https://github.com/Hamzas-Aigentic/actuals">github ↗</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="stamp">audited · vm-02</div>
+  <p class="kicker rise">Actuals — a free, open-source Claude Code plugin</p>
+  <h1 class="rise d1">Your AI metrics <span class="lie">are lying.</span></h1>
+  <p class="sub rise d2">Actuals designs the ones that aren't. It <b>interviews you</b> about your business, writes a versioned <b>measurement spec</b>, <b>audits your dashboards</b> against 20 named vanity-metric anti-patterns, generates the <b>instrumentation</b> — and renders an honest <b>scorecard</b>.</p>
+  <div class="install rise d3">
+    <div class="bar"><span>install — claude code</span><button class="copy" data-copy="/plugin marketplace add Hamzas-Aigentic/actuals&#10;/plugin install actuals@actuals-marketplace">copy</button></div>
+    <pre><span class="c">&gt;</span> /plugin marketplace add Hamzas-Aigentic/actuals
+<span class="c">&gt;</span> /plugin install actuals@actuals-marketplace</pre>
+  </div>
+  <div class="cta-row rise d4">
+    <a class="btn primary" href="https://github.com/Hamzas-Aigentic/actuals">★ Star on GitHub</a>
+    <a class="btn" href="#demo">See an audit in action ↓</a>
+  </div>
+</header>
+
+<section id="problem">
+  <div class="folio">
+    <span class="no">§1</span>
+    <h2>The measurement gap is not your imagination</h2>
+    <span class="note">two audiences, one disease</span>
+  </div>
+  <div class="receipts">
+    <div class="receipt reveal">
+      <span class="aud">Shipping AI features?</span>
+      <h3>The dashboard says "value." The formula says otherwise.</h3>
+      <p>Microsoft's Copilot dashboard computes "assisted value" as every action ×&nbsp;a flat 6 minutes ×&nbsp;a default rate of</p>
+      <span class="big">$72 / hour</span>
+      <p>— and the number silently undercounted for two months before anyone noticed. Unfalsifiable numbers can't look wrong.</p>
+      <p class="src" style="margin-top:.8rem">Receipt: <a href="https://learn.microsoft.com/en-us/viva/insights/copilot-analytics-introduction">Microsoft Learn, Copilot analytics methodology</a></p>
+    </div>
+    <div class="receipt reveal">
+      <span class="aud">Rolling out AI tools internally?</span>
+      <h3>The team feels faster. The clock disagrees.</h3>
+      <p>In a randomized trial, experienced developers using AI assistance were</p>
+      <span class="big">19% slower</span>
+      <p>— while estimating they were 20% <em>faster</em>. Nearly every corporate "hours saved" claim rests on exactly that kind of self-report.</p>
+      <p class="src" style="margin-top:.8rem">Receipt: <a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/">METR randomized controlled trial, 2025</a></p>
+    </div>
+  </div>
+  <div class="statline reveal">
+    <div><b>39%</b>of companies can attribute <em>any</em> profit impact to AI — McKinsey, State of AI</div>
+    <div><b>&gt;40%</b>of agentic AI projects predicted canceled by 2027, "unclear business value" leading — Gartner</div>
+    <div><b>56%</b>of CEOs report no revenue or cost benefit from AI to date — PwC 2026</div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="folio">
+    <span class="no">§2</span>
+    <h2>What an audit does to a dashboard</h2>
+    <span class="note">from the bundled demo fixture</span>
+  </div>
+  <div class="ledger reveal">
+    <div class="lhead"><div>What the dashboard said</div><div>What Actuals replaces it with</div></div>
+    <div class="lrow">
+      <div class="was"><span class="txt">Hours saved per week (agent survey): 1,240 hrs</span><span class="vm">VM-01</span></div>
+      <div class="now">Median ticket handle time: <b>14.2 → 9.8 min</b> <span style="color:var(--mut)">(system-measured, 8-week window)</span></div>
+    </div>
+    <div class="lrow">
+      <div class="was"><span class="txt">Estimated value: $89,280 / month (1,240 hrs × $72/hr)</span><span class="vm">VM-02</span></div>
+      <div class="now">Cost per resolved ticket: <b>$8.10 → $6.35</b> <span style="color:var(--mut)">(payroll ÷ resolutions, constants re-measured)</span></div>
+    </div>
+    <div class="lrow">
+      <div class="was"><span class="txt">Total Ava conversations since launch: 152,340</span><span class="vm">VM-06·08</span></div>
+      <div class="now">Deflection-without-reopen: <b>34% of eligible tickets</b> <span style="color:var(--mut)">(weekly, honest denominator)</span></div>
+    </div>
+    <div class="lrow">
+      <div class="was"><span class="txt">CSAT 4.7 / 5 among active users (excludes churned)</span><span class="vm">VM-10</span></div>
+      <div class="now">CSAT <b>4.1 across all offered tickets</b> · <span style="color:var(--mut)">18% disabled the assistant — now tracked</span></div>
+    </div>
+  </div>
+  <p style="margin-top:1rem;font-family:var(--mono);font-size:.78rem;color:var(--mut)">Try it yourself: <span style="color:var(--ink)">/actuals:audit examples/acme-support-ai/</span> — the repo ships the bad dashboard, the answer key, and the corrected spec.</p>
+</section>
+
+<section id="how">
+  <div class="folio">
+    <span class="no">§3</span>
+    <h2>Five commands, one honest loop</h2>
+    <span class="note">design → audit → instrument → connect → scorecard</span>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="n">1</div>
+      <div>
+        <h3><code>/actuals:design</code> — the interview</h3>
+        <p>What does the AI do? Who benefits? And the load-bearing question: <em>what will you do differently at different values of this metric?</em> Out comes a versioned <span class="mono">metrics/MEASUREMENT.md</span> — formulas, owners, guardrails, and a list of vanity metrics you pre-commit to never using.</p>
+        <pre><span class="g">### OM-1: Deflection-without-reopen rate</span>
+- <b>Formula:</b> strict deflections / all eligible tickets, weekly
+- <b>Baseline:</b> 0% (pre-launch) · <b>Target:</b> ≥25% by 2026-10
+- <b>Confidence:</b> plausible <span class="m">← proven | plausible | assumed</span></pre>
+      </div>
+    </div>
+    <div class="step reveal">
+      <div class="n">2</div>
+      <div>
+        <h3><code>/actuals:audit</code> — the reckoning</h3>
+        <p>Point it at dashboards, tracking plans, SQL, or the ROI deck. Findings cite the catalog, quote your artifact, carry published receipts, and always ship a fix.</p>
+        <pre><span class="r">### 2. VM-02 · Minutes-times-Wage Dollarization — critical</span>
+- <b>Where:</b> dashboard-export.csv:4 — "1,240 hrs × $72/hr"
+- <b>Receipt:</b> [MSFT-COPILOT] flat-multiplier value math
+- <b>Fix:</b> cost per resolved ticket; constants live in §2, re-measured</pre>
+      </div>
+    </div>
+    <div class="step reveal">
+      <div class="n">3</div>
+      <div>
+        <h3><code>/actuals:instrument</code> — make it real</h3>
+        <p>Events with typed constants, SQL/dbt models implementing each formula verbatim, a pre-launch baseline snapshot (so the claims ledger can ever pay out), and an eval harness that reports judge–human agreement next to every score.</p>
+      </div>
+    </div>
+    <div class="step reveal">
+      <div class="n">4</div>
+      <div>
+        <h3><code>/actuals:connect</code> — meet your stack where it is</h3>
+        <p>Vetted MCP configs for the tools you already run — merged into your project non-destructively, secrets stay as <span class="mono">${ENV_VAR}</span> placeholders you export yourself.</p>
+      </div>
+    </div>
+    <div class="step reveal">
+      <div class="n">5</div>
+      <div>
+        <h3><code>/actuals:scorecard</code> — the shareable truth</h3>
+        <p>A self-contained <span class="mono">dashboard.html</span>: metrics vs baselines and targets, tripwires, open findings, the claims ledger. Renders recorded values only — and says so in its footer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="catalog">
+  <div class="folio">
+    <span class="no">§4</span>
+    <h2>The anti-pattern catalog</h2>
+    <span class="note">stable IDs — cite them like CVEs</span>
+  </div>
+  <div class="cat">
+    <div class="pat reveal">
+      <span class="id">VM-01 · CRITICAL</span>
+      <h3>Self-Reported Time Savings</h3>
+      <p>"Devs report saving 11 hrs/week." Perception inverts reality — the METR trial's participants were 19% slower while feeling 20% faster.</p>
+      <div class="fix">→ measure handle time from system data, or drop the claim</div>
+    </div>
+    <div class="pat reveal">
+      <span class="id">VM-02 · CRITICAL</span>
+      <h3>Minutes-times-Wage Dollarization</h3>
+      <p>Actions × minutes-per-action × $/hour. Every constant is an assumption wearing a number's costume — and it can break silently for months.</p>
+      <div class="fix">→ dollarize only through real unit costs with re-measured constants</div>
+    </div>
+    <div class="pat reveal">
+      <span class="id">VM-06 · WARNING</span>
+      <h3>Denominator-Free Count</h3>
+      <p>"10,000 AI conversations!" Out of how many tickets? A numerator without a denominator is a press release, not a metric.</p>
+      <div class="fix">→ share of eligible volume, fixed window, cohort trend</div>
+    </div>
+  </div>
+  <p class="more reveal">+ 17 more, each with detection signals, severity, published evidence, and a concrete fix — <a href="https://github.com/Hamzas-Aigentic/actuals/blob/main/skills/audit/references/anti-patterns.md">read the full catalog</a></p>
+</section>
+
+<section id="stack">
+  <div class="folio">
+    <span class="no">§5</span>
+    <h2>Plays with your stack</h2>
+    <span class="note">nothing bundled that phones home</span>
+  </div>
+  <div class="stack">
+    <div class="lane reveal">
+      <span class="dir">data in</span>
+      <h3>Connect what you already run</h3>
+      <p>A curated, verified MCP registry — written into <em>your</em> config, on your confirmation, placeholders only.</p>
+      <div class="tags"><span>PostHog</span><span>Langfuse</span><span>Braintrust</span><span>Stripe</span><span>GitHub</span><span>Supabase</span><span>dbt</span><span>+ more</span></div>
+    </div>
+    <div class="lane reveal">
+      <span class="dir">definitions out</span>
+      <h3>Your BI does the computing</h3>
+      <p>Instrument publishes metric <em>definitions</em> as PostHog insights and a dashboard — your data and their compute carry the live numbers; the spec stays the source of truth.</p>
+      <div class="tags"><span>PostHog dashboards</span><span>SQL / dbt models</span><span>tracking plans</span></div>
+    </div>
+    <div class="lane reveal">
+      <span class="dir">checks as tools</span>
+      <h3>Ships with its own MCP server</h3>
+      <p>Run the deterministic checks from CI or any agent — no skills required.</p>
+      <div class="tags"><span class="mono">spec_lint</span><span class="mono">vanity_scan</span><span>zero deps</span><span>stdio</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="honesty">
+  <div class="honest reveal">
+    <h3>Practicing what it preaches</h3>
+    <p>Actuals ships with <a href="https://github.com/Hamzas-Aigentic/actuals/blob/main/metrics/MEASUREMENT.md" style="color:var(--ink)">its own measurement spec</a>, written with its own method. GitHub stars and installs are listed there under <span class="mono">§6 — Vanity Metrics We Will Not Use</span> (VM-03: adoption-as-impact). Its claims ledger commits to never claiming it improved your metrics without your baselines. There is no telemetry in the plugin, and <b>this page loads zero external resources and runs no analytics</b> — not even fonts.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="row">
+    <span>© 2026 · MIT license · <a href="https://github.com/Hamzas-Aigentic/actuals">github.com/Hamzas-Aigentic/actuals</a></span>
+    <span>built with Claude Code · no analytics on this page, ironically</span>
+  </div>
+</footer>
+
+</div>
+<script>
+document.querySelectorAll('button.copy').forEach(function(b){
+  b.addEventListener('click', function(){
+    navigator.clipboard.writeText(b.dataset.copy.replace(/\\n/g,'\n')).then(function(){
+      var t=b.textContent; b.textContent='copied ✓'; setTimeout(function(){b.textContent=t},1600);
+    });
+  });
+});
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+</script>
+</body>
+</html>
