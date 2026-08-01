@@ -57,7 +57,7 @@ The spec's §5 `Method` field decides what the stub contains:
 
 ## Minimal runnable harness
 
-Plain Node 22+, zero dependencies, prompts as files, no framework. The one hole to fill is `judge()` — wire it to whatever model access the project already has (SDK, CLI, gateway). Everything else runs as-is.
+Plain Node 18+, zero dependencies, prompts as files, no framework. The one hole to fill is `judge()` — wire it to whatever model access the project already has (SDK, CLI, gateway). Everything else runs as-is.
 
 ```javascript
 // run.mjs — EV-1 judge runner. Usage: node run.mjs samples/2026-08-01.jsonl

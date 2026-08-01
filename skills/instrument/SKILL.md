@@ -1,5 +1,5 @@
 ---
-name: actuals:instrument
+name: instrument
 description: This skill should be used when the user wants a measurement spec turned into working instrumentation — e.g. "instrument these metrics", "generate the tracking events", "wire up MEASUREMENT.md", "write the SQL for our metrics", "build the eval harness", "implement the measurement plan". It reads metrics/MEASUREMENT.md, detects the stack (analytics SDKs such as PostHog, Amplitude, Mixpanel or Segment, dbt projects, warehouse configs, eval platforms such as Langfuse or Braintrust, and available MCP servers), then generates event schemas with typed tracking constants, SQL or dbt models implementing each metric formula plus a baseline snapshot query, and eval harness stubs mapped to outcome metrics. It emits plain portable code when no platform is detected, stages output under metrics/instrumentation/ by default, and asks before writing into application source trees. Requires an existing spec and offers the design skill when none exists.
 version: 0.1.0
 license: MIT
@@ -68,7 +68,7 @@ Field labels are parse-exact — read them as written, do not fuzzy-match. What 
 
 1. Header `Status`: `draft` is fine — instrumentation is how a draft reaches calibration. `stale` → recommend an audit first; proceed only if the user confirms.
 2. Every in-scope metric needs a computable `Formula` (numerator, denominator, filters, window) and named `Source(s)`. A metric whose formula is empty or still a `{placeholder}` is skipped and reported by ID — never guess a formula.
-3. If Node 22+ is available, optionally validate with the design skill's linter (`skills/design/scripts/spec-lint.mjs`, resolved from the plugin install location). If Node or the script is unavailable, the manual check above suffices.
+3. If Node 18+ is available, optionally validate with the design skill's linter (`skills/design/scripts/spec-lint.mjs`, resolved from the plugin install location). If Node or the script is unavailable, the manual check above suffices.
 4. Note §1 `Access` values. Sources marked `need` or `blocked` do not block generation — SQL and events are definitions, runnable once access lands — but flag them in the final summary, and mention the connect skill (`/actuals:connect` where slash commands are available; otherwise manual MCP or credential setup) for wiring sources up.
 
 ## Stack detection

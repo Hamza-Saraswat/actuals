@@ -1,5 +1,5 @@
 ---
-name: actuals:connect
+name: connect
 description: This skill should be used when the user wants data sources connected for metrics work — e.g. "connect PostHog", "hook up our analytics", "set up the Langfuse MCP", "connect our warehouse", "add the data sources from the measurement spec", "wire up Amplitude/Mixpanel/BigQuery". It detects the user's stack, selects matching MCP servers from a curated registry (analytics, LLM observability, warehouses, GitHub, Linear, Jira, Stripe, Salesforce), verifies against a live MCP registry when one is available, and after explicit confirmation merges the chosen server entries into the user's project .mcp.json without overwriting existing entries. It never bundles third-party servers and never places literal secrets in files or chat — env vars stay as ${PLACEHOLDER} references the user exports themselves — and prints client-appropriate config snippets for non-Claude-Code environments.
 version: 0.1.0
 license: MIT
@@ -11,8 +11,8 @@ Turn "we need PostHog and the warehouse" into working MCP connections: find what
 
 Two reference files carry the details — consult both:
 
-- `references/registry.md` — the curated, date-stamped table of verified MCP servers with ready-to-merge JSON snippets and sources.
-- `references/mcp-json-format.md` — the three server shapes, `${ENV_VAR}` interpolation semantics, and the non-destructive merge algorithm.
+- [references/registry.md](references/registry.md) — the curated, date-stamped table of verified MCP servers with ready-to-merge JSON snippets and sources.
+- [references/mcp-json-format.md](references/mcp-json-format.md) — the three server shapes, `${ENV_VAR}` interpolation semantics, and the non-destructive merge algorithm.
 
 ## Operating rules
 

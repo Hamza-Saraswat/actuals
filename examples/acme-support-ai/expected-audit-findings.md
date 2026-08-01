@@ -27,7 +27,7 @@ An audit run over `dashboard-export.csv`, `tracking-plan.csv`, and `queries.sql`
 
 | Seeded pattern | Where | Detectability |
 |---|---|---|
-| VM-20 Orphan Metric | owners "TBD" / "N/A" on 5 rows | scan |
+| VM-20 Orphan Metric | owners "TBD" / "N/A" on 6 rows | scan |
 | VM-07 Double-Counted Value | `chat_started` vs `conversation_begun` vs `widget_opened` — three events, one user action; `ticket_deflected` vs `ticket_deflected_strict` both feeding "deflection" | judgment |
 
 ## queries.sql

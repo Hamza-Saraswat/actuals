@@ -1,6 +1,6 @@
 # Metrics Audit — {scope} — {YYYY-MM-DD}
 
-- **Auditor:** Actuals (actuals:audit v0.1.0)
+- **Auditor:** Actuals (audit skill)
 - **Inputs reviewed:** {files / dashboards / decks, listed}
 - **Mode:** {standalone | spec-aware (spec v{X.Y.Z})}
 - **Catalog:** VM-01..VM-20

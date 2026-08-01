@@ -30,7 +30,7 @@ Then start with either end of the problem:
 
 ## Try the demo fixture
 
-The repo ships a complete worked example — [examples/acme-support-ai/](examples/acme-support-ai/) — a 50-person SaaS whose AI-assistant dashboard is deliberately riddled with anti-patterns:
+The repo ships a complete worked example — [examples/acme-support-ai/](examples/acme-support-ai/) — a 50-person SaaS whose AI-assistant dashboard is deliberately riddled with anti-patterns. From a clone of this repo:
 
 ```
 /actuals:audit examples/acme-support-ai/

@@ -1,5 +1,5 @@
 ---
-name: actuals:design
+name: design
 description: This skill should be used when the user wants to design business-outcome metrics for an AI product, tool, or feature — e.g. "what should we measure", "design our AI metrics", "create a measurement spec", "define success metrics for our AI feature", "how do we prove our AI's ROI". It runs a structured interview (what the AI does, who benefits, business model, what decision the metrics must inform, what data exists), then writes a versioned metrics/MEASUREMENT.md spec containing north-star linkage, 3-5 outcome metrics with formula, data source, owner and confidence level, guardrail counter-metrics, eval-to-outcome mapping, an explicit vanity-metrics-to-avoid list, attribution limits ("what you cannot claim without a baseline"), and a review and calibration cadence. Not for critiquing existing dashboards (use the audit skill) and not for generic product-analytics setup.
 version: 0.1.0
 license: MIT
@@ -57,7 +57,7 @@ Walk the metrics the user *instinctively* wanted (adoption! hours saved! NPS!) a
 ## Lint and write
 
 1. If Node is available, validate: `node <skill-root>/scripts/spec-lint.mjs metrics/MEASUREMENT.md` — fix every error it reports ([scripts/spec-lint.mjs](scripts/spec-lint.mjs) checks required fields, metric counts, eval mappings, changelog consistency). If Node is unavailable, verify manually against the template's starred fields.
-6. Show the user the final draft. On confirmation, write to `metrics/MEASUREMENT.md` (create the `metrics/` directory if needed).
+2. Show the user the final draft. On confirmation, write to `metrics/MEASUREMENT.md` (create the `metrics/` directory if needed).
 
 ## Hand-offs
 

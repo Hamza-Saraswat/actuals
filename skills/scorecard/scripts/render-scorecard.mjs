@@ -5,7 +5,7 @@
 // Zero dependencies. Node >= 18. Parsing reused from spec-lint (one source of truth).
 
 import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { stripComments, headerFields, metricBlocks, fieldValue, section, lintSpec } from '../../design/scripts/spec-lint.mjs';
 
@@ -198,9 +198,21 @@ ${spec.changelog.length ? `<section><h2>Changelog</h2><ul class="changelog">${sp
 }
 
 // ---------------- CLI ----------------
-const isMain = process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href || (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]);
+const USAGE = 'Usage: node render-scorecard.mjs [specPath] [--audits-dir <dir>] [--out <file>] [--quiet]';
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1]);
 if (isMain) {
   const args = process.argv.slice(2);
+  if (args.includes('--help') || args.includes('-h')) {
+    console.log(USAGE);
+    process.exit(0);
+  }
+  const KNOWN_FLAGS = ['--audits-dir', '--out', '--quiet'];
+  const VALUE_FLAGS = ['--audits-dir', '--out'];
+  const unknown = args.filter((a, i) => a.startsWith('-') && !KNOWN_FLAGS.includes(a) && !VALUE_FLAGS.includes(args[i - 1]));
+  if (unknown.length) {
+    console.error(`Unknown option(s): ${unknown.join(', ')}\n${USAGE}`);
+    process.exit(2);
+  }
   const getOpt = (name, dflt) => {
     const i = args.indexOf(name);
     return i !== -1 && args[i + 1] ? args[i + 1] : dflt;

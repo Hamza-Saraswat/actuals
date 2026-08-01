@@ -8,6 +8,8 @@
 // Zero dependencies. Node >= 18.
 
 import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Line-level rules: any regex hit on a line raises a candidate.
 export const RULES = [
@@ -169,7 +171,7 @@ export function scanFiles(paths) {
 }
 
 // ---------------- CLI ----------------
-const isMain = process.argv[1] && import.meta.url.endsWith(process.argv[1].split('/').pop());
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1]);
 if (isMain) {
   const args = process.argv.slice(2);
   const json = args.includes('--json');
