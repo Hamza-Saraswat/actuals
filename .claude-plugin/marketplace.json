@@ -2,7 +2,7 @@
   "name": "actuals-marketplace",
   "owner": {
     "name": "Hamza Saraswat",
-    "url": "https://github.com/Hamzas-Aigentic"
+    "url": "https://github.com/Hamza-Saraswat"
   },
   "metadata": {
     "description": "Marketplace for the Actuals plugin — honest metrics for AI tools and features.",
@@ -17,8 +17,8 @@
       "author": {
         "name": "Hamza Saraswat"
       },
-      "homepage": "https://hamzas-aigentic.github.io/actuals/",
-      "repository": "https://github.com/Hamzas-Aigentic/actuals",
+      "homepage": "https://hamza-saraswat.github.io/actuals/",
+      "repository": "https://github.com/Hamza-Saraswat/actuals",
       "license": "MIT",
       "keywords": [
         "metrics",

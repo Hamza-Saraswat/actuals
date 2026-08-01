@@ -19,7 +19,7 @@ It works for both sides of the AI measurement problem: **teams shipping AI featu
 In Claude Code:
 
 ```
-/plugin marketplace add Hamzas-Aigentic/actuals
+/plugin marketplace add Hamza-Saraswat/actuals
 /plugin install actuals@actuals-marketplace
 ```
 
@@ -67,7 +67,7 @@ Skills follow the open [Agent Skills](https://agentskills.io) format — the ski
 
 ## Docs & meta
 
-- Landing page: https://hamzas-aigentic.github.io/actuals/
+- Landing page: https://hamza-saraswat.github.io/actuals/
 - Dev notes: [CLAUDE.md](CLAUDE.md) · Changelog: [CHANGELOG.md](CHANGELOG.md)
 - Market research behind the product: [MARKET-RESEARCH.md](MARKET-RESEARCH.md)
 - License: [MIT](LICENSE)
