@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.3 — 2026-08-02
+
+Hardening from the first real-world dogfood (all five skills run end-to-end against four production projects, headless).
+
+- **Headless mode is now a documented feature** of the design skill: repo-derived interview answers logged as a risk-annotated assumptions ledger; spec stays `draft` until a human reviews them
+- **Fabricated-citation guard**: when the anti-pattern catalog can't be read, skills must use plain-language pattern names or local labels — never unverified numeric VM-ids (one degraded run invented wrong ids; the audit skill's review mode later caught and corrected them)
+- README "Headless / CI usage" section + CLAUDE.md note: pair `--plugin-dir` with `--add-dir <plugin-root>` (plugin loading grants skill discovery, not file reads — without it, skills degrade to lint-guided fallbacks)
+- Dogfood results: 4/4 specs lint-clean, 4/4 audits hit their ground-truth scoring keys with zero stray writes; three audits surfaced true findings beyond the scoring key (a stale-schema dual definition, a dual-population KPI denominator, a spec-vs-dashboard formula drift)
+
 ## 0.1.2 — 2026-08-01
 
 - Landing page moved to its own repo ([actuals_lander](https://github.com/Hamza-Saraswat/actuals_lander)) and fully redesigned; `docs/` removed from this repo. Homepage links updated.

@@ -5,6 +5,7 @@ This repo is a Claude Code plugin AND its own marketplace (`.claude-plugin/marke
 ## Dev loop
 
 - **Iterating:** `claude --plugin-dir /path/to/this/repo` loads the plugin ephemerally — edits take effect on the next session, nothing is registered.
+- **Headless runs:** always pair `--plugin-dir` with `--add-dir <this repo>` — plugin loading does NOT grant file reads into the plugin dir, and without it skills can't read the catalog/templates (they fall back to lint-guided reconstruction; works, but degraded — see README "Headless / CI usage").
 - **Cache gotcha:** after a real `/plugin install`, Claude Code loads the snapshot in `~/.claude/plugins/cache/`, NOT this repo. Edits require a `version` bump in BOTH `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`, then `/plugin marketplace update actuals-marketplace` + reinstall.
 - **Version policy:** bump on every published change. Patch = docs/copy, minor = skill behavior or schema change, major = breaking spec-format change.
 

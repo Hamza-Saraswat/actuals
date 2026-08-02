@@ -22,6 +22,10 @@ Turn a plain-English description of an AI tool or feature into a defensible meas
 3. `$ARGUMENTS`, if provided, names the product/feature — use it to seed the interview.
 4. If the repo has obvious context (README, PRD, analytics config), read it first and confirm inferences instead of asking cold questions.
 
+## Headless mode (no interactive user)
+
+When no user can answer questions (CI, scheduled runs, `-p` sessions): derive the interview answers from the repo's own documentation instead. Treat every derived answer as an assumption and log all of them — with source and a risk note — in a section titled `## Interview assumptions (headless run)` appended after §9. Mark the load-bearing guesses (especially The Decision) as high-risk and name what would confirm them. Never fabricate baselines; targets proposed without an owner are labeled proposals. The resulting spec stays `draft` until a human reviews the assumptions.
+
 ## The interview
 
 Run five phases. Rules of engagement (full question bank and branch logic: [references/interview-guide.md](references/interview-guide.md)):
@@ -44,7 +48,7 @@ What sources exist (product analytics, billing, support platform, warehouse, eva
 Propose 3-5 outcome metrics and their guardrails using the method in [references/metric-design-principles.md](references/metric-design-principles.md): place each metric on the causal chain (AI feature → behavior change → driver → north star), one metric per link that the Decision needs. For every outcome metric ask the cynic's question — "what would a cynic say got worse?" — and add that as the guardrail. Iterate with the user; five metrics maximum, and fewer is better.
 
 ### Phase 5 — Anti-vanity pass
-Walk the metrics the user *instinctively* wanted (adoption! hours saved! NPS!) against the catalog at [../audit/references/anti-patterns.md](../audit/references/anti-patterns.md). Each rejected metric goes in the spec's §6 table with its VM-id and what replaces it — pre-commitment against future exec pressure. If the catalog file is unavailable (skill installed standalone), apply the short test from the principles reference: decision-relevance, honest denominator, causal warrant.
+Walk the metrics the user *instinctively* wanted (adoption! hours saved! NPS!) against the catalog at [../audit/references/anti-patterns.md](../audit/references/anti-patterns.md). Each rejected metric goes in the spec's §6 table with its VM-id and what replaces it — pre-commitment against future exec pressure. If the catalog file cannot be read (standalone install, restricted session), apply the short test from the principles reference — decision-relevance, honest denominator, causal warrant — and **never cite a numeric VM-id that was not verified against the catalog**: use plain-language pattern names or local labels (VM-A, VM-B…) instead, and log the limitation as an assumption. A fabricated citation is the catalog's own definition-rot sin.
 
 ## Drafting the spec
 

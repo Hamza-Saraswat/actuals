@@ -1,6 +1,6 @@
 {
   "name": "actuals",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Honest metrics for AI tools and features. Interviews you about your business, writes a versioned measurement spec, audits dashboards against 20 named vanity-metric anti-patterns, generates instrumentation, and renders a scorecard — with a bundled MCP server for spec linting and vanity scanning.",
   "author": {
     "name": "Hamza Saraswat",

@@ -1,10 +1,10 @@
 # Measurement Spec: Actuals (the plugin, measuring itself)
 
-- **Spec-Version:** 0.1.0
+- **Spec-Version:** 0.1.1
 - **Status:** draft
 - **Spec-Owner:** Hamza Saraswat
 - **Created:** 2026-08-01
-- **Last-Updated:** 2026-08-01
+- **Last-Updated:** 2026-08-02
 - **Review-Cadence:** monthly
 - **Next-Review:** 2026-09-01
 
@@ -81,7 +81,7 @@ Team installs Actuals → design interview produces a spec tied to a real decisi
 - **Formula:** median session count (target: 1) reported to produce a first passing spec.
 - **Source(s):** User interviews
 - **Owner:** Hamza Saraswat
-- **Baseline:** not yet measured — see CL-1
+- **Baseline:** 1 session per spec, 6–11 min each (n=4, headless self-dogfood 2026-08-02 — self-run observation, NOT independent-team data; CL-1 remains blocked)
 - **Tripwire:** median >1 session → shorten the interview; cut phases before cutting rigor.
 - **Confidence:** assumed
 
@@ -132,4 +132,5 @@ None in v1. The plugin's output quality is tracked through GM-2 (audit false-pos
 
 ## 9. Changelog
 
+- 0.1.1 — 2026-08-02 — GM-1 baseline recorded from the first 4-project self-dogfood (labeled as self-run observation, not interview data; OM baselines unchanged — still no independent teams) — calibration
 - 0.1.0 — 2026-08-01 — Initial spec, written by running the design method on the plugin itself — dogfood

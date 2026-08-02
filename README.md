@@ -61,6 +61,20 @@ node skills/audit/scripts/vanity-scan.mjs your-dashboard-export.csv --json
 - **Claim causation without a baseline.** The spec's claims ledger records what you *can't* say yet and what evidence would license it.
 - **Track you.** No telemetry. The plugin's own measurement spec ([metrics/MEASUREMENT.md](metrics/MEASUREMENT.md)) runs on user interviews, lists installs and stars as explicit vanity metrics, and eats its own cooking.
 
+## Headless / CI usage
+
+The skills run in non-interactive sessions (the design skill switches to a documented headless mode: repo-derived answers, all logged as risk-annotated assumptions). Recommended flags:
+
+```
+claude -p "Use the actuals design skill to create a measurement spec for this project." \
+  --plugin-dir /path/to/actuals \
+  --add-dir /path/to/actuals \
+  --permission-mode acceptEdits \
+  --allowedTools "Bash(node:*)"
+```
+
+`--add-dir` matters: it grants file reads into the plugin directory so skills can load the anti-pattern catalog and templates (without it they degrade to lint-guided fallbacks). To use the bundled MCP tools headless, also allowlist them (e.g. `mcp__plugin_actuals_actuals__spec_lint`).
+
 ## Portability
 
 Skills follow the open [Agent Skills](https://agentskills.io) format — the skill bodies degrade gracefully outside Claude Code (manual fallbacks where Node or MCP aren't available). The slash commands, bundled MCP server, and marketplace install are Claude Code conveniences, not requirements.
