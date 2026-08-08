@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4 — 2026-08-08
+
+- Landing page moved to its canonical home at https://useactuals.netlify.app/ (redesigned; see the actuals_lander repo). Homepage links updated in the manifests and README.
+
 ## 0.1.3 — 2026-08-02
 
 Hardening from the first real-world dogfood (all five skills run end-to-end against four production projects, headless).

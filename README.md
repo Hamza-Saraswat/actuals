@@ -81,7 +81,7 @@ Skills follow the open [Agent Skills](https://agentskills.io) format — the ski
 
 ## Docs & meta
 
-- Landing page: https://hamza-saraswat.github.io/actuals_lander/
+- Landing page: https://useactuals.netlify.app/
 - Dev notes: [CLAUDE.md](CLAUDE.md) · Changelog: [CHANGELOG.md](CHANGELOG.md)
 - Market research behind the product: [MARKET-RESEARCH.md](MARKET-RESEARCH.md)
 - License: [MIT](LICENSE)
