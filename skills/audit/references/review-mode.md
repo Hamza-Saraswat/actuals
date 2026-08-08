@@ -1,6 +1,6 @@
 # Review Mode — the recurring spec-aware re-audit
 
-Runs on top of the standard audit whenever `metrics/MEASUREMENT.md` exists (or `$ARGUMENTS` contains `review`). This is the maintenance loop that keeps a spec from becoming the thing it was written to prevent.
+Runs on top of the standard audit whenever `metrics/MEASUREMENT.md` exists (or the invocation arguments contain `review`). This is the maintenance loop that keeps a spec from becoming the thing it was written to prevent.
 
 ## Checklist
 
@@ -25,4 +25,4 @@ Changelog entry format (newest first): `- <version> — YYYY-MM-DD — <change> 
 
 ## Drift review vs re-design
 
-Review mode edits the spec; it does not redesign it. If review findings imply the chain itself is wrong (the AI's role changed, the Decision evaporated, the north star moved), stop patching and recommend `/actuals:design` in update mode — that is the major-bump path.
+Review mode edits the spec; it does not redesign it. If review findings imply the chain itself is wrong (the AI's role changed, the Decision evaporated, the north star moved), stop patching and recommend the design skill (`/actuals:design` in Claude Code) in update mode — that is the major-bump path.

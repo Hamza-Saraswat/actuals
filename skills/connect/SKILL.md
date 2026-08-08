@@ -1,8 +1,10 @@
 ---
 name: connect
-description: This skill should be used when the user wants data sources connected for metrics work — e.g. "connect PostHog", "hook up our analytics", "set up the Langfuse MCP", "connect our warehouse", "add the data sources from the measurement spec", "wire up Amplitude/Mixpanel/BigQuery". It detects the user's stack, selects matching MCP servers from a curated registry (analytics, LLM observability, warehouses, GitHub, Linear, Jira, Stripe, Salesforce), verifies against a live MCP registry when one is available, and after explicit confirmation merges the chosen server entries into the user's project .mcp.json without overwriting existing entries. It never bundles third-party servers and never places literal secrets in files or chat — env vars stay as ${PLACEHOLDER} references the user exports themselves — and prints client-appropriate config snippets for non-Claude-Code environments.
-version: 0.1.0
+description: >-
+  This skill should be used when the user wants data sources connected for metrics work — e.g. "connect PostHog", "hook up our analytics", "set up the Langfuse MCP", "connect our warehouse", "add the data sources from the measurement spec", "wire up Amplitude/Mixpanel/BigQuery". It detects the user's stack, selects matching MCP servers from a curated registry (analytics, LLM observability, warehouses, GitHub, Linear, Jira, Stripe, Salesforce), verifies against a live MCP registry when one is available, and after explicit confirmation merges the chosen server entries into the user's project .mcp.json without overwriting existing entries. It never bundles third-party servers and never places literal secrets in files or chat — env vars stay as ${PLACEHOLDER} references the user exports themselves — and prints client-appropriate config snippets for non-Claude-Code environments.
 license: MIT
+metadata:
+  version: "0.2.0"
 ---
 
 # Connect — wire up the data sources a measurement spec needs
@@ -26,8 +28,8 @@ Two reference files carry the details — consult both:
 
 Adjacent asks that belong elsewhere — redirect instead of stretching:
 
-- Adding an analytics SDK to application code, generating tracking events, or writing metric SQL → `/actuals:instrument` (connect wires up access to data; instrument produces the code that emits and queries it).
-- Deciding WHICH sources matter → `/actuals:design` builds the Data Inventory this skill works from.
+- Adding an analytics SDK to application code, generating tracking events, or writing metric SQL → the instrument skill (`/actuals:instrument` in Claude Code); connect wires up access to data, instrument produces the code that emits and queries it.
+- Deciding WHICH sources matter → the design skill (`/actuals:design` in Claude Code) builds the Data Inventory this skill works from.
 - "Add Google Analytics to my site" and similar website-tag setup → ordinary web work, not measurement-spec plumbing; only the GA4 MCP for querying existing data belongs here.
 - Fixing a broken server someone else configured → debug it (Step 7's failure ladder applies), but do not silently rewrite their entry — propose the fix and let the user apply it.
 
@@ -38,7 +40,7 @@ Prefer the spec over guesswork:
 1. If `metrics/MEASUREMENT.md` exists, read §1 Data Inventory. Every row with access `need` is a connection candidate.
 2. Rows marked `blocked` get surfaced ("blocked usually means a permissions conversation, not a config file") but are not auto-attempted.
 3. Rows marked `have` are cross-checked against `.mcp.json` — a source can be "had" through an existing export pipeline without any MCP server, so ask rather than assume it needs one.
-4. If no spec exists, work from the user's ask directly ("connect PostHog" needs no inventory). Mention once that `/actuals:design` produces a spec whose Data Inventory makes this systematic — then get on with the connection; never block on a missing spec.
+4. If no spec exists, work from the user's ask directly ("connect PostHog" needs no inventory). Mention once that the design skill produces a spec whose Data Inventory makes this systematic — then get on with the connection; never block on a missing spec.
 5. If the ask names a source the spec does not list, connect it anyway and offer to add the row to the Data Inventory afterward.
 
 State the resulting shortlist in one line before doing anything: "Spec lists PostHog (need), Stripe (need), warehouse (blocked) — connecting the first two; Stripe finance access may need an admin."
@@ -175,7 +177,7 @@ After the user restarts the client:
    - Add a §9 Changelog entry naming the sources connected.
    - Bump the patch version (status changes are patch-level per the spec's own semver policy) and update `Last-Updated`.
    - Show the spec diff before writing it — same confirmation discipline as Step 4.
-4. When the connection was the prerequisite for instrumentation, point at the next move: `/actuals:instrument` can now generate events and SQL against live sources, if available in the session.
+4. When the connection was the prerequisite for instrumentation, point at the next move: the instrument skill (`/actuals:instrument` in Claude Code) can now generate events and SQL against live sources, if available in the session.
 
 ## Worked example (compressed)
 

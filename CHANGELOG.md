@@ -1,6 +1,16 @@
 # Changelog
 
-## 0.1.4 — 2026-08-08
+## 0.2.0 — 2026-08-08
+
+Cross-tool distribution: Actuals now installs into any agent that speaks the open [Agent Skills](https://agentskills.io) standard (Codex CLI, Cursor, GitHub Copilot / VS Code, Gemini CLI, OpenCode, Amp, Goose, …) via `npx skills add Hamza-Saraswat/actuals`. The Claude Code experience is unchanged — same plugin install, same `/actuals:*` commands, same bundled MCP server.
+
+- Skill frontmatter conforms to the Agent Skills spec: `version` moved under `metadata`, new `compatibility` fields on design/instrument/scorecard declaring the sibling-install requirement (the catalog and linter cross-references) instead of leaving cherry-picked installs silently degraded
+- **Fixed: audit and scorecard frontmatter was invalid strict YAML** — their unquoted descriptions contain `: ` sequences, which Claude Code's parser tolerated but strict Agent Skills parsers (e.g. the skills CLI) rejected, silently skipping both skills. All five descriptions are now folded block scalars (`>-`), byte-identical output, immune to colons and quotes
+- Skill bodies de-Claude-ified without behavior change: `$ARGUMENTS` literals replaced with "invocation arguments" phrasing (Claude Code appends arguments regardless), `/actuals:*` cross-references scoped "in Claude Code", `<skill-root>` defined at first use, instrument's linter path made sibling-relative
+- `MEASUREMENT.template.md` no longer leaks `/actuals:*` syntax into user-repo specs (tool-neutral "the Actuals <name> skill" wording)
+- README: per-tool install matrix (skills CLI, universal `.agents/skills/`, per-tool dirs and trigger styles), MCP-server config snippets for Cursor/VS Code/Codex/Gemini, generalized headless notes (`codex exec`, `gemini -p`)
+- New `AGENTS.md` pointer so contributors on non-Claude agents find the CLAUDE.md rules
+- MCP `serverInfo.version` synced to the plugin version (was stuck at 0.1.0); CLAUDE.md gains a version-locations checklist and cross-tool distribution notes
 
 - Landing page moved to its canonical home at https://useactuals.netlify.app/ (redesigned; see the actuals_lander repo). Homepage links updated in the manifests and README.
 

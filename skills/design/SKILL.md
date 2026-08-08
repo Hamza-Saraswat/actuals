@@ -1,8 +1,11 @@
 ---
 name: design
-description: This skill should be used when the user wants to design business-outcome metrics for an AI product, tool, or feature — e.g. "what should we measure", "design our AI metrics", "create a measurement spec", "define success metrics for our AI feature", "how do we prove our AI's ROI". It runs a structured interview (what the AI does, who benefits, business model, what decision the metrics must inform, what data exists), then writes a versioned metrics/MEASUREMENT.md spec containing north-star linkage, 3-5 outcome metrics with formula, data source, owner and confidence level, guardrail counter-metrics, eval-to-outcome mapping, an explicit vanity-metrics-to-avoid list, attribution limits ("what you cannot claim without a baseline"), and a review and calibration cadence. Not for critiquing existing dashboards (use the audit skill) and not for generic product-analytics setup.
-version: 0.1.0
+description: >-
+  This skill should be used when the user wants to design business-outcome metrics for an AI product, tool, or feature — e.g. "what should we measure", "design our AI metrics", "create a measurement spec", "define success metrics for our AI feature", "how do we prove our AI's ROI". It runs a structured interview (what the AI does, who benefits, business model, what decision the metrics must inform, what data exists), then writes a versioned metrics/MEASUREMENT.md spec containing north-star linkage, 3-5 outcome metrics with formula, data source, owner and confidence level, guardrail counter-metrics, eval-to-outcome mapping, an explicit vanity-metrics-to-avoid list, attribution limits ("what you cannot claim without a baseline"), and a review and calibration cadence. Not for critiquing existing dashboards (use the audit skill) and not for generic product-analytics setup.
 license: MIT
+compatibility: Best with the full Actuals skill set installed — the anti-vanity pass reads the audit skill's catalog from a sibling directory, with a documented fallback when it is missing. Optional lint script needs Node 18+.
+metadata:
+  version: "0.2.0"
 ---
 
 # Design a Measurement Spec
@@ -18,8 +21,8 @@ Turn a plain-English description of an AI tool or feature into a defensible meas
 ## Pre-flight
 
 1. Check for an existing `metrics/MEASUREMENT.md`. If present, DO NOT clobber it — switch to update mode: read it, ask what changed, apply edits with a changelog entry and the right version bump (patch = statuses/owners, minor = metric added/changed, major = north star or Decision changed).
-2. If the user's real request is "are our current metrics any good?", that is the audit skill's job (`/actuals:audit` where available) — offer it and stop.
-3. `$ARGUMENTS`, if provided, names the product/feature — use it to seed the interview.
+2. If the user's real request is "are our current metrics any good?", that is the audit skill's job (`/actuals:audit` in Claude Code) — offer it and stop.
+3. Invocation arguments — the text after the skill name, if any — name the product/feature; use them to seed the interview.
 4. If the repo has obvious context (README, PRD, analytics config), read it first and confirm inferences instead of asking cold questions.
 
 ## Headless mode (no interactive user)
@@ -60,13 +63,13 @@ Walk the metrics the user *instinctively* wanted (adoption! hours saved! NPS!) a
 
 ## Lint and write
 
-1. If Node is available, validate: `node <skill-root>/scripts/spec-lint.mjs metrics/MEASUREMENT.md` — fix every error it reports ([scripts/spec-lint.mjs](scripts/spec-lint.mjs) checks required fields, metric counts, eval mappings, changelog consistency). If Node is unavailable, verify manually against the template's starred fields.
+1. If Node is available, validate: `node <skill-root>/scripts/spec-lint.mjs metrics/MEASUREMENT.md` (`<skill-root>` = the directory containing this SKILL.md, wherever it is installed) — fix every error it reports ([scripts/spec-lint.mjs](scripts/spec-lint.mjs) checks required fields, metric counts, eval mappings, changelog consistency). If Node is unavailable, verify manually against the template's starred fields.
 2. Show the user the final draft. On confirmation, write to `metrics/MEASUREMENT.md` (create the `metrics/` directory if needed).
 
 ## Hand-offs
 
 Offer, in order:
-- **Instrument it** — turn the spec into events, SQL, and an eval harness (the instrument skill / `/actuals:instrument`).
-- **Connect sources** — wire up anything marked `need` in the Data Inventory (the connect skill / `/actuals:connect`).
-- **Render the scorecard** — a shareable `metrics/dashboard.html` (the scorecard skill / `/actuals:scorecard`).
-- **Schedule the re-audit** — if the environment supports scheduled or recurring tasks, schedule a monthly `/actuals:audit`; otherwise tell the user to calendar it. The Next-Review date in the spec header is the commitment either way.
+- **Instrument it** — turn the spec into events, SQL, and an eval harness (the instrument skill — `/actuals:instrument` in Claude Code).
+- **Connect sources** — wire up anything marked `need` in the Data Inventory (the connect skill — `/actuals:connect` in Claude Code).
+- **Render the scorecard** — a shareable `metrics/dashboard.html` (the scorecard skill — `/actuals:scorecard` in Claude Code).
+- **Schedule the re-audit** — if the environment supports scheduled or recurring tasks, schedule a monthly re-audit with the audit skill; otherwise tell the user to calendar it. The Next-Review date in the spec header is the commitment either way.

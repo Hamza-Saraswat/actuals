@@ -12,7 +12,7 @@
     {
       "name": "actuals",
       "description": "Honest metrics for AI tools and features. Designs business-outcome metrics from your context, audits dashboards for vanity metrics, generates instrumentation, and renders a scorecard.",
-      "version": "0.1.4",
+      "version": "0.2.0",
       "source": "./.",
       "author": {
         "name": "Hamza Saraswat"

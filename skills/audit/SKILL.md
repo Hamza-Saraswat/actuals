@@ -1,8 +1,10 @@
 ---
 name: audit
-description: This skill should be used when the user wants existing metrics, dashboards, tracking plans, KPI reports, or AI ROI claims critically reviewed — e.g. "audit our metrics", "are these numbers real", "review our AI dashboard", "find vanity metrics", "is this ROI claim defensible", "sanity check this tracking plan" — including when the user pastes or attaches a dashboard export, SQL, or metrics screenshot and asks for an opinion. Also used for recurring re-audits of an existing metrics/MEASUREMENT.md spec ("re-audit", "metrics review", "metrics health check"): it then also checks spec-vs-reality drift, definition rot, stale owners and overdue calibrations, and bumps the spec version. Flags findings against a catalog of 20 named anti-patterns (self-reported time savings, minutes-times-wage dollar figures, adoption-as-impact, uncalibrated LLM judges, and more), each with severity, published evidence, and a concrete fix, then writes a dated report to metrics/audits/.
-version: 0.1.0
+description: >-
+  This skill should be used when the user wants existing metrics, dashboards, tracking plans, KPI reports, or AI ROI claims critically reviewed — e.g. "audit our metrics", "are these numbers real", "review our AI dashboard", "find vanity metrics", "is this ROI claim defensible", "sanity check this tracking plan" — including when the user pastes or attaches a dashboard export, SQL, or metrics screenshot and asks for an opinion. Also used for recurring re-audits of an existing metrics/MEASUREMENT.md spec ("re-audit", "metrics review", "metrics health check"): it then also checks spec-vs-reality drift, definition rot, stale owners and overdue calibrations, and bumps the spec version. Flags findings against a catalog of 20 named anti-patterns (self-reported time savings, minutes-times-wage dollar figures, adoption-as-impact, uncalibrated LLM judges, and more), each with severity, published evidence, and a concrete fix, then writes a dated report to metrics/audits/.
 license: MIT
+metadata:
+  version: "0.2.0"
 ---
 
 # Audit Metrics
@@ -21,7 +23,7 @@ Two symmetrical failures to avoid: softening a `critical` to be polite, and snee
 
 ## Intake
 
-Accepted inputs: CSV/JSON exports, SQL or dbt files, tracking plans, PRD metric sections, exec decks, pasted tables, screenshots (read them as ordinary images). `$ARGUMENTS` may carry file paths and/or the word `review` to force spec-aware mode.
+Accepted inputs: CSV/JSON exports, SQL or dbt files, tracking plans, PRD metric sections, exec decks, pasted tables, screenshots (read them as ordinary images). Invocation arguments (the text after the skill name) may carry file paths and/or the word `review` to force spec-aware mode.
 
 **Mode select:** if `metrics/MEASUREMENT.md` exists in the repo, run spec-aware mode (standalone checks PLUS the drift checks in [references/review-mode.md](references/review-mode.md)). Otherwise run standalone mode and, at the end, offer the design skill — an audit without a spec finds problems; a spec prevents them.
 
@@ -33,7 +35,7 @@ If inputs are machine-readable files and Node is available:
 node <skill-root>/scripts/vanity-scan.mjs <files...> --json
 ```
 
-[scripts/vanity-scan.mjs](scripts/vanity-scan.mjs) pattern-matches the catalog's detection tokens and returns candidate findings with file/line/excerpt. **Candidates are not findings.** Adjudicate every one against context — a guardrail that tracks acceptance rate in order to distrust it is not VM-05. If Node is unavailable, skip to Pass 2; the judgment pass covers everything the scanner does, slower.
+`<skill-root>` is the directory containing this SKILL.md, wherever it is installed. [scripts/vanity-scan.mjs](scripts/vanity-scan.mjs) pattern-matches the catalog's detection tokens and returns candidate findings with file/line/excerpt. **Candidates are not findings.** Adjudicate every one against context — a guardrail that tracks acceptance rate in order to distrust it is not VM-05. If Node is unavailable, skip to Pass 2; the judgment pass covers everything the scanner does, slower.
 
 ## Pass 2 — judgment pass
 
@@ -65,6 +67,6 @@ Write to `metrics/audits/YYYY-MM-DD-audit.md` (create directories as needed) aft
 
 ## Hand-offs
 
-- No spec existed → offer the design skill (`/actuals:design` where available).
+- No spec existed → offer the design skill (`/actuals:design` in Claude Code).
 - Fixes require new events or queries → offer the instrument skill.
 - Spec-aware run finished → offer a scorecard refresh, and restate the Next-Review date. If the environment supports scheduled tasks, offer to schedule the next audit; otherwise tell the user to calendar it.

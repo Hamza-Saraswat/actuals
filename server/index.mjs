@@ -11,7 +11,7 @@ import { readFileSync } from 'node:fs';
 import { lintSpec } from '../skills/design/scripts/spec-lint.mjs';
 import { scanFiles } from '../skills/audit/scripts/vanity-scan.mjs';
 
-const SERVER_INFO = { name: 'actuals', version: '0.1.0' };
+const SERVER_INFO = { name: 'actuals', version: '0.2.0' };
 const PROTOCOL_FALLBACK = '2025-06-18';
 
 const TOOLS = [

@@ -12,7 +12,7 @@ tools parse them. Guidance comments like this one can be deleted once filled in.
 - **Spec-Owner:** {named human} <!-- a person, not a team. Orphan specs rot (VM-20). -->
 - **Created:** {YYYY-MM-DD}
 - **Last-Updated:** {YYYY-MM-DD} <!-- must have a matching entry in §9 Changelog -->
-- **Review-Cadence:** monthly <!-- how often /actuals:audit re-runs -->
+- **Review-Cadence:** monthly <!-- how often the Actuals audit skill re-runs -->
 - **Next-Review:** {YYYY-MM-DD}
 
 ## 1. Business Context
@@ -43,7 +43,7 @@ spec-lint fails if this is empty or still contains a {placeholder}.
 | {e.g. Stripe} | revenue, churn | need |
 | {e.g. support platform} | tickets, CSAT, handle time | blocked |
 
-<!-- Access must be one of: have | need | blocked. /actuals:connect works this list. -->
+<!-- Access must be one of: have | need | blocked. The Actuals connect skill works this list. -->
 
 ## 2. North-Star Linkage
 
@@ -160,7 +160,7 @@ Status: blocked | in-progress | licensed.
 
 ## 8. Review & Calibration Schedule
 
-- **Recurring audit:** {e.g. monthly, via /actuals:audit — checks drift, definition rot, stale owners}
+- **Recurring audit:** {e.g. monthly, via the Actuals audit skill — checks drift, definition rot, stale owners}
 - **Calibration passes:** {e.g. grade 30 real outputs against EV-1 criteria at weeks 2, 6, then quarterly}
 - **Out-of-cycle triggers:** {metric moves >20% · model/provider change · pricing change · new data source}
 
@@ -168,4 +168,4 @@ Status: blocked | in-progress | licensed.
 
 <!-- Newest first. spec-lint fails if Last-Updated has no matching entry. -->
 
-- 0.1.0 — {YYYY-MM-DD} — Initial draft — {produced by /actuals:design interview}
+- 0.1.0 — {YYYY-MM-DD} — Initial draft — {produced by the Actuals design interview}
