@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.1 — 2026-08-08
+
+Pre-attention privacy and open-source readiness pass. No skill behavior or schema change.
+
+- **`.gitignore` hardened.** It covered only `dogfood-results/`, so `.DS_Store`, `.env`, `node_modules/`, logs, and editor dirs would all have been committed. Now covers macOS artifacts, env/secret files, Node artifacts, editor dirs, and `private/`. The audit that prompted this confirmed nothing sensitive had actually leaked — this closes the door before it can
+- **`MARKET-RESEARCH.md` removed** from the public repo (kept locally under the gitignored `private/`); README link dropped
+- **README: the demo now works from a cold arrival.** Two sections said "from a clone of this repo" but the README never told anyone to clone — added the `git clone` step. Node 18+ and the zero-dependency/no-build-step property are now stated where a newcomer reads them
+- **Corrected an overclaim.** The README and the audit skill's description said all 20 anti-patterns ship "with published evidence"; 10 of 20 carry a citation. Severity and fix are genuinely 20/20. Reworded both — an honesty tool cannot overclaim its own receipts
+- `render-scorecard.mjs` `VERSION` had silently drifted at 0.1.0 since release because it wasn't on the version-bump checklist; fixed and added to the checklist in CLAUDE.md, which also now records that `dogfood-results/` and `private/` must never be published
+
 ## 0.2.0 — 2026-08-08
 
 Cross-tool distribution: Actuals now installs into any agent that speaks the open [Agent Skills](https://agentskills.io) standard (Codex CLI, Cursor, GitHub Copilot / VS Code, Gemini CLI, OpenCode, Amp, Goose, …) via `npx skills add Hamza-Saraswat/actuals`. The Claude Code experience is unchanged — same plugin install, same `/actuals:*` commands, same bundled MCP server.
@@ -11,6 +21,8 @@ Cross-tool distribution: Actuals now installs into any agent that speaks the ope
 - README: per-tool install matrix (skills CLI, universal `.agents/skills/`, per-tool dirs and trigger styles), MCP-server config snippets for Cursor/VS Code/Codex/Gemini, generalized headless notes (`codex exec`, `gemini -p`)
 - New `AGENTS.md` pointer so contributors on non-Claude agents find the CLAUDE.md rules
 - MCP `serverInfo.version` synced to the plugin version (was stuck at 0.1.0); CLAUDE.md gains a version-locations checklist and cross-tool distribution notes
+
+## 0.1.4 — 2026-08-08
 
 - Landing page moved to its canonical home at https://useactuals.netlify.app/ (redesigned; see the actuals_lander repo). Homepage links updated in the manifests and README.
 

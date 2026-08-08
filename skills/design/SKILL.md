@@ -5,7 +5,7 @@ description: >-
 license: MIT
 compatibility: Best with the full Actuals skill set installed — the anti-vanity pass reads the audit skill's catalog from a sibling directory, with a documented fallback when it is missing. Optional lint script needs Node 18+.
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Design a Measurement Spec

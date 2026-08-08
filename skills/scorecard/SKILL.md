@@ -5,7 +5,7 @@ description: >-
 license: MIT
 compatibility: Requires Node 18+ and the design skill installed alongside (the renderer imports ../design/scripts/spec-lint.mjs). Falls back to an inline text summary when Node is unavailable.
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Render the Scorecard

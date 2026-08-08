@@ -7,7 +7,7 @@ Your AI metrics are probably lying to you. Microsoft's Copilot dashboard values 
 Actuals is a free set of agent skills that closes that gap — a Claude Code plugin that also installs into Codex CLI, Cursor, GitHub Copilot, Gemini CLI, OpenCode, and any other tool speaking the open [Agent Skills](https://agentskills.io) standard:
 
 - **`/actuals:design`** — interviews you about your business (what the AI does, who benefits, what decision the metrics must inform), then writes a versioned `metrics/MEASUREMENT.md` spec: 3–5 outcome metrics with formulas and owners, a guardrail for every metric, evals mapped to outcomes, a list of vanity metrics you pre-commit to *not* using, and a claims ledger recording what you can't claim without a baseline.
-- **`/actuals:audit`** — points at your existing dashboards, tracking plans, SQL, or ROI decks and flags findings against a catalog of **20 named anti-patterns** (self-reported time savings, minutes-times-wage dollarization, adoption-as-impact, survivor-only funnels, uncalibrated LLM judges…), each with severity, published evidence, and a concrete fix. Re-run it monthly and it also checks spec drift, definition rot, and stale owners.
+- **`/actuals:audit`** — points at your existing dashboards, tracking plans, SQL, or ROI decks and flags findings against a catalog of **20 named anti-patterns** (self-reported time savings, minutes-times-wage dollarization, adoption-as-impact, survivor-only funnels, uncalibrated LLM judges…), each with severity, a concrete fix, and — where the pattern has one — a published receipt. Re-run it monthly and it also checks spec drift, definition rot, and stale owners.
 - **`/actuals:instrument`** — turns the spec into working instrumentation: event schemas with typed constants, SQL/dbt models implementing each formula verbatim, a pre-launch baseline snapshot query, and an eval harness with judge–human calibration built in. Detects PostHog and can publish your metric *definitions* as insights/dashboards there (your data, their compute).
 - **`/actuals:connect`** — wires up the data sources you already use (PostHog, Langfuse, Braintrust, Stripe, GitHub, your warehouse…) by merging vetted MCP server configs into your project — non-destructively, with `${ENV_VAR}` placeholders, never literal secrets.
 - **`/actuals:scorecard`** — renders a self-contained `metrics/dashboard.html`: outcome metrics vs baselines and targets, guardrail tripwires, open audit findings, the claims ledger. No live queries, and the footer says so.
@@ -51,7 +51,14 @@ Then start with either end of the problem:
 
 ## Try the demo fixture
 
-The repo ships a complete worked example — [examples/acme-support-ai/](examples/acme-support-ai/) — a 50-person SaaS whose AI-assistant dashboard is deliberately riddled with anti-patterns. From a clone of this repo:
+The repo ships a complete worked example — [examples/acme-support-ai/](examples/acme-support-ai/) — a 50-person SaaS whose AI-assistant dashboard is deliberately riddled with anti-patterns. Clone the repo and point the audit at it:
+
+```
+git clone https://github.com/Hamza-Saraswat/actuals.git
+cd actuals
+```
+
+Then, in your agent:
 
 ```
 /actuals:audit examples/acme-support-ai/
@@ -61,7 +68,7 @@ The repo ships a complete worked example — [examples/acme-support-ai/](example
 
 ## The anti-pattern catalog
 
-The audit's backbone is [20 named patterns](skills/audit/references/anti-patterns.md) with [published receipts](skills/audit/references/evidence.md) — from VM-01 *Self-Reported Time Savings* (the METR perception gap) to VM-20 *Orphan Metric*. Stable IDs, detection signals, severity, and a concrete fix each. Cite them in code review like you'd cite a CVE.
+The audit's backbone is [20 named patterns](skills/audit/references/anti-patterns.md) — from VM-01 *Self-Reported Time Savings* (the METR perception gap) to VM-20 *Orphan Metric*. Stable IDs, detection signals, severity, and a concrete fix each; half of them also carry a [published receipt](skills/audit/references/evidence.md) citing the research behind the pattern. Cite them in code review like you'd cite a CVE.
 
 ## Bundled MCP server
 
@@ -70,7 +77,7 @@ The plugin ships its own MCP server exposing the deterministic checks as tools �
 - **`spec_lint`** — validate a `MEASUREMENT.md` against the schema (returns `{valid, errors, warnings}`)
 - **`vanity_scan`** — mechanically flag candidate anti-patterns in CSV/SQL/JSON/Markdown artifacts
 
-Both wrap the same library functions the skills use ([spec-lint.mjs](skills/design/scripts/spec-lint.mjs), [vanity-scan.mjs](skills/audit/scripts/vanity-scan.mjs)) — one source of truth. The scripts also run standalone:
+Both wrap the same library functions the skills use ([spec-lint.mjs](skills/design/scripts/spec-lint.mjs), [vanity-scan.mjs](skills/audit/scripts/vanity-scan.mjs)) — one source of truth. The scripts also run standalone, straight from a clone — **Node 18+, zero dependencies, no build step, nothing to install**:
 
 ```
 node skills/audit/scripts/vanity-scan.mjs your-dashboard-export.csv --json
@@ -110,5 +117,4 @@ The deterministic scripts are the universal CI entry point — `node skills/audi
 
 - Landing page: https://useactuals.netlify.app/
 - Dev notes: [CLAUDE.md](CLAUDE.md) · Changelog: [CHANGELOG.md](CHANGELOG.md)
-- Market research behind the product: [MARKET-RESEARCH.md](MARKET-RESEARCH.md)
 - License: [MIT](LICENSE)

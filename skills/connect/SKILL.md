@@ -4,7 +4,7 @@ description: >-
   This skill should be used when the user wants data sources connected for metrics work — e.g. "connect PostHog", "hook up our analytics", "set up the Langfuse MCP", "connect our warehouse", "add the data sources from the measurement spec", "wire up Amplitude/Mixpanel/BigQuery". It detects the user's stack, selects matching MCP servers from a curated registry (analytics, LLM observability, warehouses, GitHub, Linear, Jira, Stripe, Salesforce), verifies against a live MCP registry when one is available, and after explicit confirmation merges the chosen server entries into the user's project .mcp.json without overwriting existing entries. It never bundles third-party servers and never places literal secrets in files or chat — env vars stay as ${PLACEHOLDER} references the user exports themselves — and prints client-appropriate config snippets for non-Claude-Code environments.
 license: MIT
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Connect — wire up the data sources a measurement spec needs

@@ -1,10 +1,10 @@
 ---
 name: audit
 description: >-
-  This skill should be used when the user wants existing metrics, dashboards, tracking plans, KPI reports, or AI ROI claims critically reviewed — e.g. "audit our metrics", "are these numbers real", "review our AI dashboard", "find vanity metrics", "is this ROI claim defensible", "sanity check this tracking plan" — including when the user pastes or attaches a dashboard export, SQL, or metrics screenshot and asks for an opinion. Also used for recurring re-audits of an existing metrics/MEASUREMENT.md spec ("re-audit", "metrics review", "metrics health check"): it then also checks spec-vs-reality drift, definition rot, stale owners and overdue calibrations, and bumps the spec version. Flags findings against a catalog of 20 named anti-patterns (self-reported time savings, minutes-times-wage dollar figures, adoption-as-impact, uncalibrated LLM judges, and more), each with severity, published evidence, and a concrete fix, then writes a dated report to metrics/audits/.
+  This skill should be used when the user wants existing metrics, dashboards, tracking plans, KPI reports, or AI ROI claims critically reviewed — e.g. "audit our metrics", "are these numbers real", "review our AI dashboard", "find vanity metrics", "is this ROI claim defensible", "sanity check this tracking plan" — including when the user pastes or attaches a dashboard export, SQL, or metrics screenshot and asks for an opinion. Also used for recurring re-audits of an existing metrics/MEASUREMENT.md spec ("re-audit", "metrics review", "metrics health check"): it then also checks spec-vs-reality drift, definition rot, stale owners and overdue calibrations, and bumps the spec version. Flags findings against a catalog of 20 named anti-patterns (self-reported time savings, minutes-times-wage dollar figures, adoption-as-impact, uncalibrated LLM judges, and more), each with severity, a concrete fix, and a published receipt where one exists, then writes a dated report to metrics/audits/.
 license: MIT
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Audit Metrics

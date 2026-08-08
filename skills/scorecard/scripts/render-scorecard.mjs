@@ -9,7 +9,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { stripComments, headerFields, metricBlocks, fieldValue, section, lintSpec } from '../../design/scripts/spec-lint.mjs';
 
-const VERSION = '0.1.0';
+const VERSION = '0.2.1';
 
 function esc(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

@@ -1,1 +1,38 @@
+# Dogfood runs against real projects — never publish.
 dogfood-results/
+
+# Anything deliberately kept out of the public repo.
+private/
+
+# Secrets — nothing here should ever be committed.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Node (the scripts are zero-dependency, but tooling may still land here)
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn-error.log*
+.npm/
+
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Scratch / generated output
+*.log
+*.bak
+*.orig
+*.tmp

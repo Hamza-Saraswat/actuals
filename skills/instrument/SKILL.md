@@ -5,7 +5,7 @@ description: >-
 license: MIT
 compatibility: Best with the full Actuals skill set installed — cites the audit skill's catalog and can run the design skill's linter from sibling directories; degrades gracefully standalone. Optional scripts need Node 18+.
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Instrument
